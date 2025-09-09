@@ -6,100 +6,25 @@ import numpy as np
 import os
 import random
 
-# v1, v2
-# filedirs = {
-#     "static": {
-#         # "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v1-hpa-static-0803-170129-v1-hpa-static-0803-170129",
-#         "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v1-5-hpa-static-0804-011858-v1-5-hpa-static-0804-011858",
-#         "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-greedy-static-0804-015024-v1-greedy-static-0804-015024",
-#         "dqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-dqn-static-0803-171650-v1-dqn-static-0803-171650",
-#         "mddqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-mddqn-static-0803-170013-v1-mddqn-static-0803-170013",
-#     },
-#     "random": {
-#         # "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v1-hpa-random-0803-170159-v1-hpa-random-0803-170159",
-#         "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v1-5-hpa-random-0804-011909-v1-5-hpa-random-0804-011909",
-#         "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-greedy-random-0804-015015-v1-greedy-random-0804-015015",
-#         "dqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-dqn-random-0803-173907-v1-dqn-random-0803-173907",
-#         "mddqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-mddqn-random-0803-170107-v1-mddqn-random-0803-170107",
-#     },
-#     "yoyo": {
-#         # "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v1-hpa-yoyo-0803-170144-v1-hpa-yoyo-0803-170144",
-#         "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v1-5-hpa-yoyo-0804-011922-v1-5-hpa-yoyo-0804-011922",
-#         "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-greedy-yoyo-0804-015007-v1-greedy-yoyo-0804-015007",
-#         "dqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-dqn-yoyo-0803-173903-v1-dqn-yoyo-0803-173903",
-#         "mddqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-mddqn-yoyo-0803-170054-v1-mddqn-yoyo-0803-170054",
-#     },
-# }
-
-# v3
-# filedirs = {
-#     "static": {
-#         "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-hpa-static-0803-171127-v1-1-hpa-static-0803-171127",
-#         "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-greedy-static-0804-015024-v1-greedy-static-0804-015024",
-#         "dqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-dqn-static-0804-010706-v1-1-dqn-static-0804-010706",
-#         "mddqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-mddqn-static-0804-010631-v1-1-mddqn-static-0804-010631",
-#     },
-#     "random": {
-#         "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-hpa-random-0803-171138-v1-1-hpa-random-0803-171138",
-#         "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-greedy-random-0804-015015-v1-greedy-random-0804-015015",
-#         "dqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-dqn-random-0804-010724-v1-1-dqn-random-0804-010724",
-#         "mddqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-mddqn-random-0804-010655-v1-1-mddqn-random-0804-010655",
-#     },
-#     "yoyo": {
-#         "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-hpa-yoyo-0803-171133-v1-1-hpa-yoyo-0803-171133",
-#         "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-greedy-yoyo-0804-015007-v1-greedy-yoyo-0804-015007",
-#         "dqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-dqn-yoyo-0804-010716-v1-1-dqn-yoyo-0804-010716",
-#         "mddqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-mddqn-yoyo-0804-010645-v1-1-mddqn-yoyo-0804-010645",
-#     },
-# }
-
-# v4
-# filedirs = {
-#     "static": {
-#         "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v3-hpa-static-0804-033953-v3-hpa-static-0804-033953",
-#         "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v3-greedy-static-0804-034114-v3-greedy-static-0804-034114",
-#         "dqn": "/disk2/duk/work-disk2/pd-for-ms/output/v3-dqn-static-0804-034651-v3-dqn-static-0804-034651",
-#         "mddqn": "/disk2/duk/work-disk2/pd-for-ms/output/v3-mddqn-static-0804-033547-v3-mddqn-static-0804-033547",
-#     },
-#     "random": {
-#         "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v3-hpa-random-0804-034023-v3-hpa-random-0804-034023",
-#         "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v3-greedy-random-0804-034129-v3-greedy-random-0804-034129",
-#         "dqn": "/disk2/duk/work-disk2/pd-for-ms/output/v3-dqn-random-0804-034703-v3-dqn-random-0804-034703",
-#         "mddqn": "/disk2/duk/work-disk2/pd-for-ms/output/v3-mddqn-random-0804-034642-v3-mddqn-random-0804-034642",
-#     },
-#     "yoyo": {
-#         "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v3-hpa-yoyo-0804-034008-v3-hpa-yoyo-0804-034008",
-#         "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v3-greedy-yoyo-0804-034120-v3-greedy-yoyo-0804-034120",
-#         "dqn": "/disk2/duk/work-disk2/pd-for-ms/output/v3-dqn-yoyo-0804-034657-v3-dqn-yoyo-0804-034657",
-#         "mddqn": "/disk2/duk/work-disk2/pd-for-ms/output/v3-mddqn-yoyo-0804-034635-v3-mddqn-yoyo-0804-034635",
-#     },
-# }
-
-# v5
 filedirs = {
     "static": {
-        "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-1-hpa-static-0804-055114-v1-1-1-hpa-static-0804-055114",
-        # "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-greedy-static-0804-015024-v1-greedy-static-0804-015024",
-        "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-1-greedy-static-0804-055738-v1-1-1-greedy-static-0804-055738",
-        # "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-2-greedy-static-0804-060155-v1-1-2-greedy-static-0804-060155",
-        "dqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-dqn-static-0803-171650-v1-dqn-static-0803-171650",
-        "mddqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-mddqn-static-0803-170013-v1-mddqn-static-0803-170013",
+        "hpa": "",
+        "greedy": "",
+        "dqn": "",
+        "mddqn": "",
     },
     "random": {
-        "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-1-hpa-random-0804-055133-v1-1-1-hpa-random-0804-055133",
-        # "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-greedy-random-0804-015015-v1-greedy-random-0804-015015",
-        "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-1-greedy-random-0804-055750-v1-1-1-greedy-random-0804-055750",
-        # "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-2-greedy-random-0804-060136-v1-1-2-greedy-random-0804-060136",
-        "dqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-dqn-random-0803-173907-v1-dqn-random-0803-173907",
-        "mddqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-mddqn-random-0803-170107-v1-mddqn-random-0803-170107",
+        "hpa": "",
+        "greedy": "",
+        "dqn": "",
+        "mddqn": "",
     },
     "yoyo": {
-        "hpa": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-1-hpa-yoyo-0804-055125-v1-1-1-hpa-yoyo-0804-055125",
-        # "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-greedy-yoyo-0804-015007-v1-greedy-yoyo-0804-015007",
-        "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-1-greedy-yoyo-0804-055744-v1-1-1-greedy-yoyo-0804-055744",
-        # "greedy": "/disk2/duk/work-disk2/pd-for-ms/output/v1-1-2-greedy-yoyo-0804-060146-v1-1-2-greedy-yoyo-0804-060146", #
-        "dqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-dqn-yoyo-0803-173903-v1-dqn-yoyo-0803-173903",
-        "mddqn": "/disk2/duk/work-disk2/pd-for-ms/output/v1-mddqn-yoyo-0803-170054-v1-mddqn-yoyo-0803-170054",
+        "hpa": "",
+        "greedy": "",
+        "greedy": "",
+        "dqn": "",
+        "mddqn": "",
     },
 }
 
@@ -200,18 +125,14 @@ def get_dangerous_node_with_step():
                 json_data = json.load(f)
             test_data = json_data[-num_episodes:]
             print(f"Processing {attacker} - {defender} with {len(test_data)} episodes")
-            data = pd.DataFrame(
-                columns=[f"ep-{i}" for i in range(num_episodes)], index=range(num_steps)
-            )
+            data = pd.DataFrame(columns=[f"ep-{i}" for i in range(num_episodes)], index=range(num_steps))
             for ep in range(num_episodes):
                 # ep_success = all(
                 #     item["defense_success"] for item in test_data[ep][-10:]
                 # )
                 for step in range(num_steps):
                     if step < len(test_data[ep]):
-                        data.loc[step, f"ep-{ep}"] = test_data[ep][step]["evaluation"][
-                            "dangerous_nodes"
-                        ]
+                        data.loc[step, f"ep-{ep}"] = test_data[ep][step]["evaluation"]["dangerous_nodes"]
                     # 提前退出的都是防御成功的不记录
             # 按 step 进行平滑
             data = data.apply(smooth_data, axis=1, window_size=45)
@@ -231,9 +152,7 @@ def draw_dangerous_node_with_step():
         for defender in defenders:
             datapath = f"{datadir}/{attacker}-{defender}.csv"
             data = pd.read_csv(datapath)
-            data = data.melt(
-                id_vars=["step"], var_name="episode", value_name="dangerous_nodes"
-            )
+            data = data.melt(id_vars=["step"], var_name="episode", value_name="dangerous_nodes")
             data["episode"] = data["episode"].str.replace("ep-", "").astype(int)
             data = data[data["dangerous_nodes"] < np.inf]  # 过滤掉无效数据
             data["defender"] = defender
@@ -297,12 +216,7 @@ def get_step_success_rate():
             step_success_rate = []
             for step in range(num_steps):
                 success_count = sum(
-                    (
-                        (1 if item[step]["defense_success"] else 0)
-                        if step < len(item)
-                        else 1
-                    )
-                    for item in test_data
+                    ((1 if item[step]["defense_success"] else 0) if step < len(item) else 1) for item in test_data
                 )
                 step_success_rate.append(success_count / num_episodes)
             step_success_rate = smooth_data(pd.Series(step_success_rate), 8)
@@ -326,10 +240,7 @@ def get_episode_success_rate():
             with open(filepath, "r", encoding="utf-8") as f:
                 json_data = json.load(f)
             test_data = json_data[-num_episodes:]
-            success_count = sum(
-                all(item["defense_success"] for item in ep_data[-10:])
-                for ep_data in test_data
-            )
+            success_count = sum(all(item["defense_success"] for item in ep_data[-10:]) for ep_data in test_data)
             success_rate = success_count / num_episodes
             data.loc[attacker, defender] = success_rate
     data.to_csv(f"{outdir}/data.csv")
@@ -349,19 +260,13 @@ def get_delay_with_step():
             with open(filepath, "r", encoding="utf-8") as f:
                 json_data = json.load(f)
             test_data = json_data[-num_episodes:]
-            data = pd.DataFrame(
-                columns=[f"ep-{i}" for i in range(num_episodes)], index=range(num_steps)
-            )
+            data = pd.DataFrame(columns=[f"ep-{i}" for i in range(num_episodes)], index=range(num_steps))
             min_delay = np.inf
             for ep in range(num_episodes):
                 for step in range(num_steps):
                     if step < len(test_data[ep]):
                         data.loc[step, f"ep-{ep}"] = np.mean(
-                            list(
-                                test_data[ep][step]["evaluation"][
-                                    "route_delay"
-                                ].values()
-                            )
+                            list(test_data[ep][step]["evaluation"]["route_delay"].values())
                         )
                         if defender == "mddqn" and attacker == "random":
                             min_delay = random.uniform(100, 400)
@@ -417,18 +322,12 @@ def get_idle_replica_utlization_with_step():
             with open(filepath, "r", encoding="utf-8") as f:
                 json_data = json.load(f)
             test_data = json_data[-num_episodes:]
-            data = pd.DataFrame(
-                columns=[f"ep-{i}" for i in range(num_episodes)], index=range(num_steps)
-            )
+            data = pd.DataFrame(columns=[f"ep-{i}" for i in range(num_episodes)], index=range(num_steps))
             for ep in range(num_episodes):
                 for step in range(num_steps):
                     if step < len(test_data[ep]):
                         data.loc[step, f"ep-{ep}"] = (
-                            sum(
-                                test_data[ep][step]["evaluation"][
-                                    "unused_replicas"
-                                ].values()
-                            )
+                            sum(test_data[ep][step]["evaluation"]["unused_replicas"].values())
                             / test_data[ep][step]["evaluation"]["num_replicas"]
                         )
                     else:
@@ -471,9 +370,7 @@ def draw_idle_replica_utilization_with_step():
         for defender in defenders:
             datapath = f"{datadir}/{attacker}-{defender}.csv"
             data = pd.read_csv(datapath)
-            data = data.melt(
-                id_vars=["step"], var_name="episode", value_name="idle_utilization"
-            )
+            data = data.melt(id_vars=["step"], var_name="episode", value_name="idle_utilization")
             data["episode"] = data["episode"].str.replace("ep-", "").astype(int)
             data["defender"] = defender
             # data["attacker"] = attacker
@@ -492,31 +389,28 @@ def draw_idle_replica_utilization_with_step():
 def get_reward_data():
     filepaths = {
         "random": [
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-random-1.csv",
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-random-2.csv",
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-random-3.csv",
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-random-4.csv",
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-random-5.csv",
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-random-6.csv",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
         ],
         "static": [
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-static-1.csv",
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-static-2.csv",
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-static-3.csv",
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-static-4.csv",
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-static-5.csv",
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-static-6.csv",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
         ],
         "yoyo": [
-            # "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-yoyo-1.csv",
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-yoyo-3.csv",
-            # "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-yoyo-4.csv",
-            # "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/mddqn-yoyo-5.csv",
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/v1-1-mddqn-yoyo-0804-010645-v1-1-mddqn-yoyo-0804-010645_log.csv",
-            "/disk2/duk/work-disk2/pd-for-ms/result/reward/raw/v3-mddqn-yoyo-0804-034635-v3-mddqn-yoyo-0804-034635_log.csv",
+            "",
+            "",
+            "",
         ],
     }
-    outdir = "/disk2/duk/work-disk2/pd-for-ms/result/reward/data"
+    outdir = "./result/reward/data"
     if not os.path.exists(outdir):
         os.makedirs(outdir)
     for key, items in filepaths.items():
@@ -536,8 +430,8 @@ def get_reward_data():
 
 
 def draw_reward_data():
-    datadir = "/disk2/duk/work-disk2/pd-for-ms/result/reward/data"
-    outdir = "/disk2/duk/work-disk2/pd-for-ms/result/reward/draw"
+    datadir = "./result/reward/data"
+    outdir = "./result/reward/draw"
     if not os.path.exists(outdir):
         os.makedirs(outdir)
     attackers = ["random", "static", "yoyo"]

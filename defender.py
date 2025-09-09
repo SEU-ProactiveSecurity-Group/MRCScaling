@@ -29,27 +29,6 @@ class PdDefender:
                 scale_info["threshold_scale"] = action[0] * 10
                 scale_info["target_scale"] = action[1] * 10
         else:
-            # 一维动作空间，动作范围 0 到 18，0 代表不采取行动
-            # action = action[0] - 1
-            # if action >= 0:
-            #     scale_type = action // 9
-            #     scale = action % 9 + 1
-            #     if scale_type == 0:
-            #         # 扩容
-            #         threshold_scale = scale
-            #         target_scale = scale
-            #     else:
-            #         # 缩容
-            #         threshold_scale = scale
-            #         target_scale = scale + 0.5
-            #     self.env.scale_replicas(
-            #         threshold_scale * 10, math.ceil(target_scale * 10)
-            #     )
-            #     scale_info["type"] = (
-            #         "scale_up" if threshold_scale >= target_scale else "scale_down"
-            #     )
-            #     scale_info["threshold_scale"] = threshold_scale * 10
-            #     scale_info["target_scale"] = math.ceil(target_scale * 10)
             # 一维动作空间，动作范围 0 到 81，0 代表不采取行动
             action = action[0] - 1
             if action >= 0:

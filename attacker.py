@@ -8,48 +8,7 @@ class MultiRouteAttacker:
         self.env = env
         self.graph = env.graph
         self.traffic_per_route = 200
-        # route list
-        # self.routes = self.load_routes(self.routepath)
-        # self.num_routes = 6
-        # self.num_routes = 4
-        # self.num_routes = 6
-        # self.num_routes = 20
         self.routes = ["s1", "s9", "s10", "s12"]
-        # self.routes = ["s1", "s4", "s7", "s9", "s10", "s12"]
-        # self.routes = [
-        #     "s56",
-        #     "s81",
-        #     "s62",
-        #     "s8",
-        #     "s22",
-        #     "s31",
-        #     "s96",
-        #     "s45",
-        #     "s93",
-        #     "s92",
-        #     "s20",
-        #     "s24",
-        #     "s71",
-        #     "s13",
-        #     "s18",
-        #     "s5",
-        #     "s90",
-        #     "s28",
-        #     "s32",
-        #     "s44",
-        # ]
-        # self.routes = [
-        #     "s38",
-        #     "s8",
-        #     "s27",
-        #     "s5",
-        #     "s40",
-        #     "s26",
-        #     "s22",
-        #     "s7",
-        #     "s34",
-        #     "s14",
-        # ]
         self.traffics = {route: self.traffic_per_route for route in self.routes}
 
     def load_routes(self, routepath):

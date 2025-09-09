@@ -16,10 +16,7 @@ class Env:
         log_console=False,
     ):
         self.graphpath = "social-network-workmodel.json"
-        # self.graphpath = "services-100.json"
-        # self.graphpath = "services-50.json"
         self.metric_factor = {
-            # "queue_size": 1000,   # 暂不实现队列，有队列就会有背压
             "cpu": 0.001,  # 标准值为0.001，调小可以减少cpu_stress系数对最后cpu占用影响，即加大traffic对cpu占用影响
             "cpu_b": 10,
             "memory": 0.0000001,  # 标准值为0.0000001
@@ -28,7 +25,6 @@ class Env:
             "delay_process_memory": 0.25,
             "transmission": 1,  # max_traffic设的比较大，暂时没有考虑max_traffic对traffic的fallback
             "queue_rate": 1.4,  # 每个服务的排队系数，导致能容忍流量（或cpu或memory）可以超出100%一点
-            # "delay_queue": 0.1,
         }
         self.num_metrics = 5
         self.metrics = ["cpu", "memory", "transmission_rate", "delay", "replicas"]
@@ -256,34 +252,6 @@ class Env:
         self.graph.nodes[service]["replicas"] -= 1
         return host
 
-    # def scale_replicas(self, threshold_scale, target_scale):
-    #     self.execute_penalties = {
-    #         "add": 0,
-    #         "delete": 0,
-    #     }
-    #     self.scale_nums = {"add": 0, "delete": 0}
-    #     self.cal_state_from_graph()
-    #     for service_idx, metrics in enumerate(self.state):
-    #         service = self.services[service_idx]
-    #         if threshold_scale >= target_scale:
-    #             # scale up
-    #             if metrics[0] > threshold_scale or metrics[1] > threshold_scale:
-    #                 scale_num = math.ceil(
-    #                     self.graph.nodes[service]["replicas"]
-    #                     * (max(metrics[0], metrics[1]) / target_scale - 1)
-    #                 )
-    #                 for _ in range(scale_num):
-    #                     host = self.add_replica_to_host(service)
-    #         else:
-    #             # scale down
-    #             if metrics[0] < threshold_scale and metrics[1] < threshold_scale:
-    #                 scale_num = math.ceil(
-    #                     self.graph.nodes[service]["replicas"]
-    #                     * (1 - max(metrics[0], metrics[1]) / target_scale)
-    #                 )
-    #                 for _ in range(scale_num):
-    #                     host = self.delete_replica_from_host(service)
-
     def scale_replicas(self, scale1, scale2):
         self.execute_penalties = {
             "add": 0,
@@ -384,14 +352,6 @@ class Env:
         # 计算每个服务的最大流量，存每条路由对应最大流量和资源指标
         for service, detail in self.graph.nodes(data=True):
             # 最大流量
-            # max_traffic = self.cal_max_traffic(
-            #     detail["loader"],
-            #     detail["workers"],
-            #     detail["threads"],
-            #     self.metric_factor,
-            # )
-            # self.graph.nodes[service]["limits"]["traffic"] = max_traffic
-            # 找到流经该服务的attacked_routes
             routes = []
             for route in self.attacked_routes:
                 if service in self.routes[route]:
@@ -399,29 +359,6 @@ class Env:
             # print("Service in Routes", service, routes)
             if not routes or len(routes) <= 0:
                 continue
-            # if (
-            #     detail["traffic"]
-            #     > self.graph.nodes[service]["limits"]["traffic"]
-            #     * self.graph.nodes[service]["replicas"]
-            #     * self.metric_factor["queue_rate"]
-            # ):
-            #     fail_percent = (
-            #         detail["traffic"]
-            #         - self.graph.nodes[service]["limits"]["traffic"]
-            #         * self.graph.nodes[service]["replicas"]
-            #         * self.metric_factor["queue_rate"]
-            #     ) / detail["traffic"]
-            #     # 在包含此服务的每条路由中，更新最大流量和失败请求率
-            #     for route in routes:
-            #         if (
-            #             fail_percent
-            #             > max_route_metrics[route]["traffic"]["fail_percent"]
-            #         ):
-            #             max_route_metrics[route]["traffic"]["service"] = service
-            #             max_route_metrics[route]["traffic"]["value"] = detail["traffic"]
-            #             max_route_metrics[route]["traffic"][
-            #                 "fail_percent"
-            #             ] = fail_percent
             # cpu和memory占用
             cpu = self.cal_cpu(detail["loader"], detail["traffic"], self.metric_factor)
             memory = self.cal_memory(
@@ -469,14 +406,7 @@ class Env:
 
         # print("Max Route Metrics", max_route_metrics)
         # self.print_traffic()
-
-        # 不知道为啥，重新载入后traffic并不是变为原来 1-fail_percent 的值，比这个值大，是因为有回路吗
-        # 计算每条路由入口流量和失败请求率，重新载入流量
-        # route_traffic = {}
-        # for route in self.routes:
-        #     if self.graph.nodes[route]["traffic"] > 0:
-        #         route_traffic[route] = self.graph.nodes[route]["traffic"]
-        # route_traffic = self.attacker.traffics.copy()
+        
         self.clear_and_load_normal_traffic()
         # print(route_traffic)
 
@@ -618,13 +548,7 @@ class Env:
         if route not in self.graph.nodes:
             print(f"Route {route} does not exist in the graph.")
             return
-        # todo: 调用这个函数记录一次攻击流量，这样写是期望于每步之后会clear_traffic
-        # 但是最精确的还是从attacker那里获取attacked_routes
-        # 如果每个step的攻击流量累加，则表示有发送端有队列或者服务有队列，要考虑背压和排队时延，比较复杂不做了
-        # traffic += self.attacked_routes.get(route, 0)
-        # if self.attacked_routes.get(route) is None:
-        #     self.attacked_routes[route] = 0
-        # self.attacked_routes[route] += traffic
+
         attacked_nodes = set()
         rs = [[route, traffic, 1.0]]
         while rs and len(rs) > 0:
@@ -824,20 +748,6 @@ class Env:
                 # ep_success_reward = -320
                 ep_success_reward = -200
 
-        # 计算 reward
-        # reward = 0.5 * (
-        #     0.3 * danger_penalty
-        #     + 0.5 * fail_rate_penalty
-        #     + 0.3 * ep_success_reward
-        #     # + more_safe_reward
-        #     # + delay_penalty
-        #     + 0.3 *replica_cost
-        #     # + scale_cost
-        #     + 0.5 * time_cost
-        #     # + execute_penalty
-        #     + 0.5 * safety_reward
-        #     # + replica_reward
-        # )
         reward = 1 * (
             danger_penalty
             + fail_rate_penalty

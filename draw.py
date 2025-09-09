@@ -5,14 +5,6 @@ import seaborn as sns
 import os
 import argparse
 
-# jsonname = "ms-hpa-0726-235051"
-# jsonname = "ms-hpa-0727-230815"
-# jsonname = "ms-hpa-0727-230830"
-# jsonname = "ms-dqn-0726-222116"
-# jsonname = "ms-mddqn-0726-194045"
-# jsonname = "ms-mddqn-0727-122218"
-# jsonname = "ms-mddqn-0727-123611"
-
 parser = argparse.ArgumentParser(description="argparse")
 parser.add_argument(
     "--jsonname", type=str, required=True, help="Name of the JSON file to analyze"
@@ -20,9 +12,7 @@ parser.add_argument(
 args = parser.parse_args()
 jsonname = args.jsonname
 
-# jsonname = "test-mddqn-random-0728-041905-test-mddqn-random-0728-041905"
-
-jsonpath = f"/disk2/duk/work-disk2/pd-for-ms/output/{jsonname}/json/info.json"
+jsonpath = f"./output/{jsonname}/json/info.json"
 
 output_dir = f"./graph/{jsonname}"
 

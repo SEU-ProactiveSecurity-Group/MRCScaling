@@ -41,25 +41,6 @@ def run_and_test(env, num_episodes=2000, title="demo"):
     final_title = f"{title}-dqn-{env.attacker_type}-{timestamp}"
     logger = Logger(title=final_title)
 
-    # list[episode]
-    # ep_return_list = []  # tensorboard, csv
-    # ep_danger_penalty_list = []  # tensorboard, csv
-    # ep_fail_rate_penalty_list = []  # tensorboard, csv
-    # ep_delay_penalty_list = []  # tensorboard, csv
-    # ep_replica_cost_list = []  # tensorboard, csv
-    # ep_time_cost_list = []  # tensorboard, csv
-    # ep_safety_reward_list = []  # tensorboard, csv
-
-    # list[episode * step]
-    # step_actor_loss_list = []  # tensorboard
-    # step_critic_loss_list = []  # tensorboard
-
-    # list[episode][step]
-    # ep_action_list = []  # json
-    # ep_state_list = []  # json
-
-    # list[episode][step]{dict}
-    # ep_info_list = []  # json
 
     ep_return_list = []
     global_step = 0
